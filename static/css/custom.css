@@ -1,0 +1,42 @@
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f4f7f6;
+}
+
+.hero-content {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: all 1s ease;
+}
+
+.animate-text {
+    background: linear-gradient(45deg, #3498db, #2ecc71);
+    -webkit-background-clip: text;
+    color: transparent;
+    display: inline-block;
+}
+
+.hero-image img {
+    transform: scale(0.8);
+    opacity: 0.7;
+    transition: all 0.8s ease;
+}
+
+.hero-image img:hover {
+    transform: scale(0.85);
+    opacity: 1;
+}
+
+.cta-buttons .btn {
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+.cta-buttons .btn:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 8px rgba(0,0,0,0.15);
+}
+
+.navbar {
+    background: linear-gradient(135deg, #3498db, #2ecc71) !important;
+}

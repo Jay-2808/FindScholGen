@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Resume Generator</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+        .navbar {
+            background-color: #007bff;
+        }
+        .navbar-brand, .nav-link {
+            color: white !important;
+        }
+        .card {
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        #previewContent {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navigation Menu -->
+    <nav class="navbar navbar-expand-lg">
+        <div class="container">
+            <a class="navbar-brand" href="#">ResumeGen</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/search-scholarships">Find Scholarships</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/generate-resume">Resume Builder</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/settings">Settings</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Resume Form -->
+    <div class="container mt-5">
+        <div class="card p-4">
+            <h2 class="mb-4"><i class="bi bi-file-earmark-person"></i> Resume Generator</h2>
+            <form id="resumeForm">
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label"><i class="bi bi-person"></i> Full Name</label>
+                        <input type="text" class="form-control" id="fullName" required>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label"><i class="bi bi-envelope"></i> Email</label>
+                        <input type="email" class="form-control" id="email" required>
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label"><i class="bi bi-mortarboard"></i> Education</label>
+                    <textarea class="form-control" id="education" rows="3"></textarea>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label"><i class="bi bi-briefcase"></i> Experience</label>
+                    <textarea class="form-control" id="experience" rows="3"></textarea>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label"><i class="bi bi-tools"></i> Skills</label>
+                    <input type="text" class="form-control" id="skills" placeholder="Comma-separated skills">
+                </div>
+
+                <button type="submit" class="btn btn-primary"><i class="bi bi-file-earmark-text"></i> Generate Resume</button>
+            </form>
+        </div>
+
+        <!-- Resume Preview -->
+        <div id="resumePreview" class="mt-4 card p-4" style="display:none;">
+            <h2><i class="bi bi-eye"></i> Resume Preview</h2>
+            <div id="previewContent" class="border p-3"></div>
+            <button id="downloadResume" class="btn btn-success mt-3"><i class="bi bi-download"></i> Download PDF</button>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById("resumeForm").addEventListener("submit", function(event) {
+            event.preventDefault();
+
+            // Get input values
+            const fullName = document.getElementById("fullName").value;
+            const email = document.getElementById("email").value;
+            const education = document.getElementById("education").value;
+            const experience = document.getElementById("experience").value;
+            const skills = document.getElementById("skills").value.split(',').map(skill => skill.trim()).join(', ');
+
+            // Display Resume Preview
+            document.getElementById("resumePreview").style.display = "block";
+            document.getElementById("previewContent").innerHTML = `
+                <h3>${fullName}</h3>
+                <p><i class="bi bi-envelope"></i> ${email}</p>
+                <h4>Education</h4>
+                <p>${education}</p>
+                <h4>Experience</h4>
+                <p>${experience}</p>
+                <h4>Skills</h4>
+                <p>${skills}</p>
+            `;
+        });
+
+        document.getElementById("downloadResume").addEventListener("click", function() {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            const fullName = document.getElementById("fullName").value;
+            const email = document.getElementById("email").value;
+            const education = document.getElementById("education").value;
+            const experience = document.getElementById("experience").value;
+            const skills = document.getElementById("skills").value.split(',').map(skill => skill.trim()).join(', ');
+
+            // Format PDF
+            doc.setFont("helvetica", "bold");
+            doc.setFontSize(18);
+            doc.text(fullName, 15, 20);
+            doc.setFont("helvetica", "normal");
+            doc.setFontSize(12);
+            doc.text(`📧 Email: ${email}`, 15, 30);
+            doc.text("🎓 Education:", 15, 40);
+            doc.text(education, 15, 50, { maxWidth: 180 });
+            doc.text("💼 Experience:", 15, 70);
+            doc.text(experience, 15, 80, { maxWidth: 180 });
+            doc.text("🔧 Skills:", 15, 100);
+            doc.text(skills, 15, 110, { maxWidth: 180 });
+
+            doc.save(`${fullName}-Resume.pdf`);
+        });
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
